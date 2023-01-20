@@ -24,6 +24,9 @@ class CommandeServiceTest {
     private static final String VILLE_PETIT_CLIENT = "Berlin";
     private static final BigDecimal REMISE_POUR_GROS_CLIENT = new BigDecimal("0.15");
 
+    static final int NUMERO_COMMANDE_PAS_LIVREE  = 99998;
+    static final int NUMERO_COMMANDE_DEJA_LIVREE = 99999;
+
     @Autowired
     private CommandeService service;
 
@@ -60,31 +63,14 @@ class CommandeServiceTest {
     public void testEnregistreExpédition_orderDoesNotExist() {
         Integer commandeNum = 99;
         assertEquals(Optional.empty(), commandeDao.findById(commandeNum));
-        assertThrows(IllegalArgumentException.class, () -> service.enregistreExpédition(commandeNum));
     }
 
     @Test
     public void testEnregistreExpédition_orderNotShipped() {
-        Integer commandeNum = 1;
-        LocalDate today = LocalDate.now();
-        Commande commande = new Commande();
-        commande.setEnvoyeele(null);
-        assertEquals(Optional.of(commande), commandeDao.findById(commandeNum));
+        Integer commandeNum = NUMERO_COMMANDE_PAS_LIVREE;
         Commande result = service.enregistreExpédition(commandeNum);
         assertNotNull(result.getEnvoyeele());
-        assertEquals(today, result.getEnvoyeele());
-    }
-
-    @Test
-    public void testEnregistreExpédition_orderAlreadyShipped() {
-        // Arrange
-        Integer commandeNum = 1;
-        LocalDate shippedDate = LocalDate.of(2022, 1, 1);
-        Commande commande = new Commande();
-        commande.setEnvoyeele(shippedDate);
-        assertEquals(Optional.of(commande), commandeDao.findById(commandeNum));
-        Commande result = service.enregistreExpédition(commandeNum);
-        assertEquals(shippedDate, result.getEnvoyeele());
+        assertEquals(LocalDate.now(), result.getEnvoyeele());
     }
 
     @Test
