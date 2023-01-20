@@ -57,6 +57,8 @@ public class LigneService {
             ligneDao.save(ligne);
             verifProduit.setUnitesCommandees(verifProduit.getUnitesCommandees() + quantite);
             produitDao.save(verifProduit);
+        } else {
+            throw new IllegalArgumentException("La ligne n'a pas été ajouté");
         }
         return ligne;
     }

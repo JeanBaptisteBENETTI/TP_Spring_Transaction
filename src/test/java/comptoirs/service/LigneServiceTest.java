@@ -81,12 +81,6 @@ class LigneServiceTest {
         Integer commandeNum = NUMERO_COMMANDE_DEJA_LIVREE;
         Integer produitRef = REFERENCE_PRODUIT_DISPONIBLE_1;
         int quantite = 1;
-        Commande commande  = new Commande();
-        commande.setEnvoyeele(LocalDate.now());
-        Produit produit = new Produit();
-        assertEquals(Optional.of(produit), produitDao.findById(produitRef));
-        assertEquals(Optional.of(commande), commandeDao.findById(commandeNum));
-        Ligne res = service.ajouterLigne(commandeNum, produitRef, quantite);
-        assertNull(res);
+        assertThrows(IllegalArgumentException.class, () -> service.ajouterLigne(commandeNum, produitRef, quantite));
     }
 }
