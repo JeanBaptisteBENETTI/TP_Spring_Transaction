@@ -69,15 +69,14 @@ public class CommandeService {
         var commande = commandeDao.findById(commandeNum).orElseThrow();
         if (commande.getEnvoyeele() == null) {
             commande.setEnvoyeele(LocalDate.now());
-            Commande c = null;
-            for (Ligne l : c.getLignes()) {
+            //Commande c = null;
+            for (Ligne l : commande.getLignes()) {
                 Produit p = l.getProduit();
                 p.setUnitesEnStock(p.getUnitesEnStock() - l.getQuantite());
             }
         } else {
-            throw new IllegalArgumentException("la commande est déjà enregistré");
+            throw new IllegalArgumentException("La commande est déjà enregistré");
         }
-
         return commande;
     }
 }
