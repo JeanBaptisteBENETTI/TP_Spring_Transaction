@@ -74,24 +74,18 @@ class CommandeServiceTest {
     }
 
     @Test
-    public void testEnregistreExpédition_decrementStock() {
-        Integer commandeNum = 1;
-        Commande commande = new Commande();
-        commande.setEnvoyeele(null);
-        Ligne ligne1 = new Ligne();
-        Produit produit1 = new Produit();
-        produit1.setUnitesEnStock(10);
-        ligne1.setProduit(produit1);
-        ligne1.setQuantite(3);
-        Ligne ligne2 = new Ligne();
-        Produit produit2 = new Produit();
-        produit2.setUnitesEnStock(5);
-        ligne2.setProduit(produit2);
-        ligne2.setQuantite(2);
-        commande.setLignes(Arrays.asList(ligne1, ligne2));
-        assertEquals(Optional.of(commande), commandeDao.findById(commandeNum));
-        Commande result = service.enregistreExpédition(commandeNum);
-        assertEquals(7, produit1.getUnitesEnStock());
-        assertEquals(3, produit2.getUnitesCommandees());
+    void checkdateExpedition() {
+        Integer commandeNumero = NUMERO_COMMANDE_PAS_LIVREE;
+        var commande = service.enregistreExpédition(commandeNumero);
+        assertEquals(LocalDate.now(), commande.getEnvoyeele(), "La commande est déjà envoyée!");
+    }
+
+    @Test
+    void testEnregistreExpédition_decrementStock() {
+        Integer commandeNumero = NUMERO_COMMANDE_PAS_LIVREE;
+        var commande = service.enregistreExpédition(commandeNumero);
+        for (Ligne ligne : commande.getLignes()) {
+            assertEquals(10, ligne.getProduit().getUnitesEnStock());
+        }
     }
 }
